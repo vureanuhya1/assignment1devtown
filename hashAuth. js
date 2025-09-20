@@ -1,0 +1,37 @@
+// hashAuth.js
+
+const bcrypt = require("bcrypt");
+
+// Number of salt rounds (higher = more secure but slower)
+const saltRounds = 10;
+
+// Function to hash a password
+async function hashPassword(password) {
+  try {
+    const hashed = await bcrypt.hash(password, saltRounds);
+    return hashed;
+  } catch (err) {
+    console.error("Error hashing password:", err);
+  }
+}
+
+// Function to verify password during login
+async function verifyPassword(password, hashedPassword) {
+  try {
+    const match = await bcrypt.compare(password, hashedPassword);
+    return match; // true if correct, false otherwise
+  } catch (err) {
+    console.error("Error verifying password:", err);
+  }
+}
+
+// Example usage
+(async () => {
+  const password = "mySecret123"; // plain password
+  const hashedPassword = await hashPassword(password);
+  console.log("Hashed password:", hashedPassword);
+
+  // Simulating login check
+  const isMatch = await verifyPassword("mySecret123", hashedPassword);
+  console.log("Password match?", isMatch);
+})();
